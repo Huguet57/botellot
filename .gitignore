@@ -1,1 +1,3 @@
-./examples/config.py
+scripts/__pycache__/
+examples/config.py
+*.token
