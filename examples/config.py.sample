@@ -1,0 +1,7 @@
+config = {
+  'user': 'USER',
+  'password': 'PASSWORD',
+  'host': 'HOST',
+  'database': 'DATABASE',
+  'raise_on_warnings': True
+}
