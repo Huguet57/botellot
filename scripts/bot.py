@@ -4,6 +4,7 @@ import grouphandling
 import commands
 import callback
 
+# TODO: Crear un fitxer de configuració amb constants privades
 BOT_TOKEN = '5056375298:AAEvWp2PmwcwzZTxWiGKriDUlAIJp9xLkkg'
 
 updater = Updater(BOT_TOKEN, use_context=True)
