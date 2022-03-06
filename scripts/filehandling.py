@@ -1,7 +1,5 @@
 from time import time
 from pdfparsing import fillPDFData
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-import hashlib
 
 RAW_FILES_PATH = '/home/andreu/botellot/files/'
 TICKETS_PATH = '/home/andreu/botellot/tickets/'
@@ -47,12 +45,6 @@ def getTicketsData(filename):
 
     return tickets_data
 
-def encode_name(name):
-    return hashlib.md5(name.encode()).hexdigest()
-
-def compose_msg(data):
-    return f"[{encode_name(data['qr'])}]\nEntrada pel {data['diasetmana']} ({data['date']})\nClub: {data['clubname']}\nPreu: {data['price']}€"
-
 def handlePDF(update, context):
     # Step 1: Download file
     correct, filename = downloadFile(update, context)
@@ -67,9 +59,8 @@ def handlePDF(update, context):
         return
 
     # Step 3: Reply with data
+    from messaging import compose_ticket_msg, publish_button
     for ticket_data in tickets_data:
-        msg = compose_msg(ticket_data)
-
-        keyboard = [[InlineKeyboardButton("Demana-te-la", callback_data='0')]]
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        update.message.reply_text(msg, reply_markup=reply_markup)
+        msg = compose_ticket_msg(ticket_data)
+        button = publish_button("Publicar")
+        update.message.reply_text(msg, reply_markup=button)

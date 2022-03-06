@@ -3,4 +3,4 @@ def start(update, context) -> None:
 
 def publish(update, context) -> None:
     import grouphandling
-    grouphandling.send_msg()
+    grouphandling.send_public_msg()
