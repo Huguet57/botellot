@@ -3,9 +3,11 @@ import filehandling
 import grouphandling
 import commands
 import callback
+import json
 
 # TODO: Crear un fitxer de configuració amb constants privades
-BOT_TOKEN = '5056375298:AAEvWp2PmwcwzZTxWiGKriDUlAIJp9xLkkg'
+config = json.load(open("./config.json"))
+BOT_TOKEN = config["BOT_TOKEN"]
 
 updater = Updater(BOT_TOKEN, use_context=True)
 
