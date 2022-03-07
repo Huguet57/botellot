@@ -1,8 +1,11 @@
 from time import time
 from pdfparsing import fillPDFData
+import json 
 
-RAW_FILES_PATH = '/home/andreu/botellot/files/'
-TICKETS_PATH = '/home/andreu/botellot/tickets/'
+config = json.load(open("./config.json"))
+
+RAW_FILES_PATH = config["RAW_FILES_PATH"]
+TICKETS_PATH = config["TICKETS_PATH"]
 
 def downloadFile(update, context):
     timestamp = round(time()*1e6)
