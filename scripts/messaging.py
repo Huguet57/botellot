@@ -10,6 +10,7 @@ def send_public_msg(msg):
     group_chatID = config["GROUP_CHAT_ID"]    
     reply_markup = {"inline_keyboard":[[{"text": "Reserva-la", "callback_data": "reserve"}]]}
     msg = bot.send_message(chat_id=group_chatID, text=msg.text, reply_markup=reply_markup)
+    return msg
 
 def encode_name(name):
     return hashlib.md5(name.encode()).hexdigest()[0:6]
