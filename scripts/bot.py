@@ -1,6 +1,6 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 import filehandling
-import grouphandling
+import messaging
 import commands
 import callback
 import json
