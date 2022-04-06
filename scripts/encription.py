@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from tokenize import String
 from cryptography.fernet import Fernet
 import zlib

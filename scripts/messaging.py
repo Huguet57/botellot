@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import hashlib
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram import Bot

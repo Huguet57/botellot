@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, ParseMode, Bot
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, CallbackContext
 from encription import get_hashtag_data

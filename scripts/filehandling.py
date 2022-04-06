@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from time import time
 from pdfparsing import fillPDFData
 import json 
