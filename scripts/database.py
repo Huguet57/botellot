@@ -5,8 +5,8 @@ config = json.load(open("./config.json"))
 PUBLISHED_PATH = config["PUBLISHED_PATH"]
 SOLD_PATH = config["SOLD_PATH"]
 
-def to_item(id, msg):
-    return f"ticket_id={id},message_id={msg.message_id}"
+def to_item(username, id, msg):
+    return f"ticket_id={id},message_id={msg.message_id},username={username}"
 
 def from_item(str):
     attributes = str.split(',')
@@ -17,12 +17,16 @@ def from_item(str):
 
     return item
 
-def add_published(msg):
+def add_published(query, msg):
+    # Username
+    username = query.from_user.username
+    
+    # Id
     from encription import get_hashtag_data
     id = get_hashtag_data(msg.text)
 
     with open(PUBLISHED_PATH + id + ".msg", 'w') as db_item:
-        db_item.write(to_item(id, msg))
+        db_item.write(to_item(username, id, msg))
 
 def is_published(id):
     for file in os.listdir(os.fsencode(PUBLISHED_PATH)):
@@ -34,15 +38,25 @@ def is_published(id):
             return True
     
     return False
-            
-def get_message_id(id):
+
+def get_item(id):
     for entry in os.scandir(PUBLISHED_PATH):
         with open(entry.path, 'r') as msg:
             item = from_item(msg.read())
             if item["ticket_id"] == id:
-                return item["message_id"]
+                return item
 
-    return "Undefined"
+    return {}
+
+def get_publisher_name(id):
+    item = get_item(id)
+    if item == {}: return "Undefined"
+    else: return item["username"]
+
+def get_message_id(id):
+    item = get_item(id)
+    if item == {}: return "Undefined"
+    else: return item["message_id"]
 
 def sold(id):
     # Move from 'Published' to 'Sold'

@@ -27,7 +27,7 @@ def switch(update: Update, context: CallbackContext) -> None:
         bot.delete_message(chat_id=responded_msg.chat_id, message_id=(responded_msg.message_id+1))
         bot.delete_message(chat_id=responded_msg.chat_id, message_id=responded_msg.message_id)
         database.erase(ticket_id)
-        publish_offer(update, context)
+        publish_offer(update, context, republish=True)
         print("Republished")
     elif callback_data == "depublish":
         delete_msg(update, context)
@@ -66,17 +66,16 @@ def delete_msg(update: Update, context: CallbackContext) -> None:
     except:
         responded_msg.reply_text(f"Error: No s'ha pogut despublicar l'entrada #{ticket_id}. Mira si ja ho està.")
 
-def publish_offer(update: Update, context: CallbackContext) -> None:    
+def publish_offer(update: Update, context: CallbackContext, republish=False) -> None:    
+    query = update.callback_query
+    query.answer()
+
     import messaging
-    msg = messaging.send_public_msg(update.callback_query.message)
+    msg = messaging.send_public_msg(query.message)
 
     # Afegir a la database
     import database
-    database.add_published(msg)
-
-    responded_msg = update.callback_query.message
-    query = update.callback_query
-    query.answer()
+    if not republish: database.add_published(query, msg)
 
     # Canviar a 'Despublicar'
     keyboard = [[InlineKeyboardButton("Despublicar", callback_data='depublish')]]
@@ -112,6 +111,8 @@ def confirm_buy(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     query.answer()
 
-    repeated_username = f"Parla amb: @{query.from_user.username}.\n" * 10
+    username = database.get_publisher_name(ticket_id)
+
+    repeated_username = f"Parla amb: @{username}.\n" * 10
     query.edit_message_text(f"ENTRADA #{ticket_id}\n\n" + repeated_username + "\nSi hi ha cap problema, sempre pots renunciar a l'entrada per tornar-la a publicar.")
     database.sold(ticket_id)
