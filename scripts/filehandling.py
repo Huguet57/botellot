@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from time import time
+
+from numpy import empty
 from pdfparsing import fillPDFData
 import json 
 
@@ -21,8 +23,9 @@ def downloadFile(update, context):
 
 def getTicketsData(filename):
     import os
-    import qrtools
+    from qrtools import qrtools
     from pdf2image import convert_from_path
+    import cv2 as cv
 
     qr = qrtools.QR()
     fullpath = RAW_FILES_PATH + f"{filename}.pdf"
@@ -38,8 +41,14 @@ def getTicketsData(filename):
         ticket.save(prepath, 'JPEG')
         
         # Step 2: Decode QR and get its data
-        qr.decode(filename=prepath)
-        tickets_data[i]["qr"] = qr.data
+        im = cv.imread(prepath)
+        det = cv.QRCodeDetector()
+        retval, decoded_info, points, straight_qrcode = det.detectAndDecodeMulti(im)
+        
+        if len(decoded_info) > 0:
+            tickets_data[i]["qr"] = decoded_info[0]
+        else:
+            return {}
 
         # Step 3: Change name to QR data
         if tickets_data[i]['clubname'] != 'Undefined':
